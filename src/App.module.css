@@ -42,7 +42,6 @@ body {
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
   gap: 1rem;
-  width: 80%;
   height: 80%;
 }
 
@@ -56,6 +55,7 @@ body {
   justify-content: center;
   font-size: 1.5rem;
   padding: 8px;
+  max-height: 15vh;
 }
 
 .cell:hover {
