@@ -181,6 +181,8 @@ const App: Component = () => {
   // If the board is empty, generate a new one
   if (storageBoard === "[]") {
     generateBoard();
+  } else {
+    checkForWin(boardItems());
   }
 
   return (
