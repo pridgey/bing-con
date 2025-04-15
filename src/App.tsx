@@ -1,6 +1,7 @@
-import { createSignal, type Component } from "solid-js";
+import { createSignal, Show, type Component } from "solid-js";
 
 import styles from "./App.module.css";
+import { Confetti } from "./Confetti";
 
 const allTerms = [
   "Frieren Cosplay",
@@ -102,21 +103,54 @@ const allTerms = [
   "Takes a Photo Without Asking",
 ];
 
+type BingoSquare = {
+  ID: number;
+  Label: string;
+  Checked: boolean;
+  Column: number;
+  Row: number;
+};
+
 const App: Component = () => {
   // Get board from storage if it exists
   const storageBoard = window.localStorage.getItem("board") ?? "[]";
   // Create a signal for the board items, default to storage if exists
-  const [boardItems, setBoardItems] = createSignal<string[]>(
+  const [boardItems, setBoardItems] = createSignal<BingoSquare[]>(
     JSON.parse(storageBoard)
   );
+  // Whether the board is in a win state
+  const [win, setWin] = createSignal(false);
 
-  // Get checked items from storage if they exist
-  const storageCheckedItems =
-    window.localStorage.getItem("checkedItems") ?? "[]";
-  // Create a signal for any checked items
-  const [checkedItems, setCheckedItems] = createSignal<string[]>(
-    JSON.parse(storageCheckedItems)
-  );
+  // Function to check for win
+  const checkForWin = (boardState: BingoSquare[]) => {
+    let win = false;
+    // Check all columns and rows
+    for (let i = 0; i <= 4; i++) {
+      const row = boardState.filter((item) => item.Row === i);
+      const column = boardState.filter((item) => item.Column === i);
+      console.log("Row and Column", { i, row, column });
+      if (
+        row.every((item) => item.Checked === true) ||
+        column.every((item) => item.Checked === true)
+      ) {
+        win = true;
+        break;
+      }
+    }
+    // Check diagonals
+    const diagonalSelections = [0, 6, 12, 18, 24];
+    const diagonal = boardState.filter((item) =>
+      diagonalSelections.includes(item.ID)
+    );
+    const altDiagonalSelections = [4, 8, 12, 16, 20];
+    const altDiagonal = boardState.filter((item) =>
+      altDiagonalSelections.includes(item.ID)
+    );
+    win =
+      diagonal.every((item) => item.Checked) ||
+      altDiagonal.every((item) => item.Checked);
+    setWin(win);
+  };
 
   // Function to generate the board
   const generateBoard = () => {
@@ -124,12 +158,22 @@ const App: Component = () => {
     const shuffledTerms = allTerms.sort(() => Math.random() - 0.5);
     // Create a board from the first 25 terms
     const board = shuffledTerms.slice(0, 25);
+
+    // Convert to full types
+    const boardSquares: BingoSquare[] = board.map((labelString, index) => ({
+      Checked: false,
+      Column: index % 5,
+      ID: index,
+      Label: labelString,
+      Row: Math.floor(index / 5),
+    }));
+
     // Set the board items and checked items
-    setBoardItems(board);
-    setCheckedItems([]);
+    setBoardItems(boardSquares);
     // Save the board to local storage
-    window.localStorage.setItem("board", JSON.stringify(board));
-    window.localStorage.setItem("checkedItems", JSON.stringify([]));
+    window.localStorage.setItem("board", JSON.stringify(boardSquares));
+    // Reset win
+    setWin(false);
   };
 
   // If the board is empty, generate a new one
@@ -155,27 +199,41 @@ const App: Component = () => {
         Generate New Board
       </button>
       <div class={styles.board}>
-        {boardItems().map((item) => (
+        {boardItems().map((item, index) => (
           <button
             classList={{
               [styles.cell]: true,
-              [styles.selected]: checkedItems().includes(item),
+              [styles.selected]: item.Checked,
             }}
             onclick={() => {
-              const newCheckedItems = checkedItems().includes(item)
-                ? checkedItems().filter((i) => i !== item)
-                : [...checkedItems(), item];
-              setCheckedItems(newCheckedItems);
+              // Get items
+              const currentItems = boardItems();
+              // Create new object
+              const updatedItem = {
+                ...item,
+                Checked: !item.Checked,
+              };
+              // Update on item list
+              currentItems[item.ID] = updatedItem;
+              // Update state
+              setBoardItems([...currentItems]);
+              // Update local storage
               window.localStorage.setItem(
-                "checkedItems",
-                JSON.stringify(newCheckedItems)
+                "board",
+                JSON.stringify(currentItems)
               );
+
+              // Check for win
+              checkForWin(currentItems);
             }}
           >
-            {item}
+            {item.Label}
           </button>
         ))}
       </div>
+      <Show when={win()}>
+        <Confetti />
+      </Show>
     </main>
   );
 };
