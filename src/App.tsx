@@ -138,17 +138,19 @@ const App: Component = () => {
       }
     }
     // Check diagonals
-    const diagonalSelections = [0, 6, 12, 18, 24];
-    const diagonal = boardState.filter((item) =>
-      diagonalSelections.includes(item.ID)
-    );
-    const altDiagonalSelections = [4, 8, 12, 16, 20];
-    const altDiagonal = boardState.filter((item) =>
-      altDiagonalSelections.includes(item.ID)
-    );
-    win =
-      diagonal.every((item) => item.Checked) ||
-      altDiagonal.every((item) => item.Checked);
+    if (!win) {
+      const diagonalSelections = [0, 6, 12, 18, 24];
+      const diagonal = boardState.filter((item) =>
+        diagonalSelections.includes(item.ID)
+      );
+      const altDiagonalSelections = [4, 8, 12, 16, 20];
+      const altDiagonal = boardState.filter((item) =>
+        altDiagonalSelections.includes(item.ID)
+      );
+      win =
+        diagonal.every((item) => item.Checked) ||
+        altDiagonal.every((item) => item.Checked);
+    }
     setWin(win);
   };
 
