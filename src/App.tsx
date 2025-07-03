@@ -101,6 +101,14 @@ const allTerms = [
   "Lolita",
   "Gyaru",
   "Takes a Photo Without Asking",
+  "K-Pop Demon Hunters",
+  "Huntrix Group Cosplay",
+  "Saja Boy Group Cosplay",
+  "K-Pop Demon Hunters Tiger",
+  "Date Everything",
+  "Love In Deep Space",
+  "Dragon Sylus",
+  "Mermaid Rafayel",
 ];
 
 type BingoSquare = {
