@@ -14,6 +14,7 @@ const allTerms = [
   "Maid Cosplay",
   "Wow that's a lot of skin",
   "Sexy Genderbend Cosplay",
+  "Genderbend Cosplay",
   "Helluva Boss Cosplay",
   "Hazbin Hotel Cosplay",
   "90's Anime Cosplay",
@@ -34,7 +35,6 @@ const allTerms = [
   "Views table in silence, doesn't buy",
   "Cosplay with wings",
   "Cosplay with moving parts",
-  "Hololive/Vtuber Cosplay",
   "Chainsaw Man Cosplay",
   "Pokemon Cosplay (not trainer)",
   "Pokemon Trainer Cosplay",
@@ -78,7 +78,7 @@ const allTerms = [
   "More than 3 Keychains on an item",
   "Visited by Another Vendor",
   "Holding a Large Plushie",
-  "ITA Bag Covered in Pins",
+  "Covered in Pins",
   "Fallout Cosplay",
   "Person Getting Pulled Away",
   "Someone Overstays Their Welcome",
@@ -98,8 +98,6 @@ const allTerms = [
   "Cool Tattoo",
   "Abstract Tattoo",
   "Big Wig",
-  "Lolita",
-  "Gyaru",
   "Takes a Photo Without Asking",
   "K-Pop Demon Hunters",
   "Huntrix Group Cosplay",
@@ -109,6 +107,22 @@ const allTerms = [
   "Love In Deep Space",
   "Dragon Sylus",
   "Mermaid Rafayel",
+  "Kid on leash",
+  "Suzu knows somebody",
+  "Harry Potter",
+  "Hatsune Miku",
+  "Obscure / Unknown Cosplay",
+  "ADA Cosplay",
+  "Hijab Cosplay",
+  "Partner Put In More Effort Cosplay",
+  "Teenage Mutant Ninja Turtles",
+  "Dragon Ball Cosplay",
+  "One Piece Cosplay",
+  "Pretty Sure That's a Celebrity",
+  "Master Chief",
+  "Avatar The Last Airbender",
+  "Scott Pilgrim vs The World",
+  "Got the Cosplay Wrong",
 ];
 
 type BingoSquare = {
@@ -206,6 +220,9 @@ const App: Component = () => {
           ) {
             generateBoard();
           }
+        }}
+        style={{
+          "z-index": win() ? "101" : "unset",
         }}
       >
         Generate New Board
